@@ -1,41 +1,25 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
+import { shuffle } from "@/utils"; // Assuming shuffle is correctly implemented in your utils
+import Search from "./Search";
 
-import { shuffle } from '@/utils';
-
-import Search from './Search';
-
-const allUsers = [
-  'john',
-  'alex',
-  'george',
-  'simon',
-  'james',
-];
+const allUsers = ["john", "alex", "george", "simon", "james"];
 
 interface DemoProps {}
 
-export default function Demo({}: DemoProps) {
+const Demo: React.FC<DemoProps> = () => {
   const [users, setUsers] = useState(allUsers);
 
-  const handleSearch = useCallback(
-    (text: string) => {
-      console.log(users[0]);
-
-      const filteredUsers = allUsers.filter((user) =>
-        user.includes(text),
-      );
-      setUsers(filteredUsers);
-    },
-    [users],
-  );
+  const handleSearch = useCallback((text: string) => {
+    setUsers((prevUsers) => {
+      const filteredUsers = allUsers.filter((user) => user.includes(text));
+      return filteredUsers;
+    });
+  }, []);
 
   return (
-    <div className='tutorial'>
-      <div className='align-center mb-2 flex'>
-        <button onClick={() => setUsers(shuffle(allUsers))}>
-          Shuffle
-        </button>
-
+    <div className="tutorial">
+      <div className="align-center mb-2 flex">
+        <button onClick={() => setUsers(shuffle(allUsers))}>Shuffle</button>
         <Search onChange={handleSearch} />
       </div>
       <ul>
@@ -45,4 +29,6 @@ export default function Demo({}: DemoProps) {
       </ul>
     </div>
   );
-}
+};
+
+export default Demo;
